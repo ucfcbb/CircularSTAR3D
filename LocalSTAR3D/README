@@ -1,0 +1,85 @@
+LocalSTAR3D: a local stack-based RNA 3D structural alignment tool
+
+* Terms
+LocalSTAR3D is free of charge for non-commercial purposes, and it comes
+with ABSOLUTELY NO WARRANTY.
+
+Where appropriate, please cite the following LocalSTAR3D paper:
+Chen et al. (2020). "LocalSTAR3D: a local stack-based RNA 3D structural alignment tool." 
+Nucleic Acids Res., 48(13),e77-e77. (doi:10.1093/nar/gkaa453).
+
+* Requirement
+LocalSTAR3D is implemented by using java 1.8 and can be executed in 64-bit 
+Linux. Two java packages, "commons-cli-1.2.jar" and "EJML-core-0.26.jar", 
+are used in the program to support argument parsing and efficient 
+matrix computation. "DSSR" is used for base pairing annotation. "RemovePseudoknots"
+is used for pseudo-knots removal. "Apache ant" is required to compile the source code.
+
+Apache ant: http://ant.apache.org/bindownload.cgi
+
+For Linux system, ant can be installed directly by using command line.
+Debian/Ubuntu: "apt-get install ant"
+Fedora/CentOS: "yum install ant"
+
+Notice: RemovePseudoknots in the "tool" directory is compiled with 
+GNU libc 2.12 in Linux. (The version of libc can be checked with "ldd --version".) 
+If RemovePseudoknots can not work (*.npk.ct files can not be generated), 
+please update the GNU lib in Linux or recompile RNAstructure in your system. 
+RNAstructure can be downloaded at "http://rna.urmc.rochester.edu/RNAstructure.html".
+
+LocalSTAR3D uses DSSR for PDB annotation. There are two ways to use DSSR with LocalSTAR3D:
+1. Download DSSR into tools/. After that, you will have LocalSTAR3D/tools/DSSR/x3dna-dssr.
+2. If you don't have DSSR, you can copy the DSSR annotation for your PDB into LocalSTAR3D/STAR3D_struct_info/.
+   For example, if you want to preprocess PDB 6d90, you can manually copy your 6d90.dssr file into LocalSTAR3D/STAR3D_struct_info/.
+   The DSSR annotation files that were used to generate the results in our manuscript are provided along with LocalSTAR3D package.
+   
+* Installation
+Go to the LocalSTAR3D home directory and execute "ant jar".
+(The users can also clean the compiled files by executing "ant clean")
+
+* Preprocessing
+LocalSTAR3D downloads PDB files and preprocesses them to retrieve the 
+secondary structural information.
+
+Go to the LocalSTAR3D home directory and execute 
+"java -cp LocalSTAR3D.jar Preprocess [PDB ID] [Chain ID]".
+
+Notice: Make sure the folder "tools", "PDB", "STAR3D_struct_info" and file "LocalSTAR3D.jar" 
+sin the same directory. 
+
+* Structural Alignment
+Go to the LocalSTAR3D home directory and execute 
+"java -jar LocalSTAR3D.jar [PDB1 ID] [Chain1 ID] [PDB2 ID] [Chain2 ID]"
+More options for the program can be seen by executing 
+"java -jar LocalSTAR3D.jar -h"
+
+* Examples
+Kink-turn motifs:
+java -cp LocalSTAR3D.jar Preprocess 4bw0 A
+java -cp LocalSTAR3D.jar Preprocess 1s72 0
+java -jar LocalSTAR3D.jar -d false -n 10 4bw0 A 1s72 0
+
+Group II introns:
+java -cp LocalSTAR3D.jar Preprocess 5g2x A
+java -cp LocalSTAR3D.jar Preprocess 4r0d A	
+java -jar LocalSTAR3D.jar 5g2x A 4r0d A
+
+IRES:
+java -cp LocalSTAR3D.jar Preprocess 4v5c AV
+java -cp LocalSTAR3D.jar Preprocess 6d90 4
+java -jar LocalSTAR3D.jar 4v5c AV 6d90 4
+
+ACKNOWLEDGEMENTS:
+LocalSTAR3D is developed for an NIH funded project (R01GM102515).
+
+LocalSTAR3D uses java packages Commons CLI and EJML.
+Commons CLI: http://commons.apache.org/proper/commons-cli/
+EJML: http://ejml.org/wiki/index.php?title=Main_Page
+
+Third party software RemovePesudoknots (in RNAstructure) was 
+downloaded from http://rna.urmc.rochester.edu/RNAstructure.html
+
+Third party software DSSR was downloaded from http://forum.x3dna.org/rna-structures/.
+	  
+CONTACTS:
+For bug reports or comments please contact xiaoli.chen@knights.ucf.edu and shaojie.zhang@ucf.edu.

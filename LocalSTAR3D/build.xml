@@ -1,0 +1,38 @@
+<project name="LocalSTAR3D">
+  <property name="src.dir" value="src"/>
+  <property name="class.dir" value="class"/>
+  <property name="lib.dir" value="lib"/>
+  
+  <property name="main-class" value="STAR3D"/>
+
+  <path id="classpath">
+    <fileset dir="${lib.dir}" includes="**/*.jar"/>
+  </path>
+
+  <target name="clean">
+    <delete dir="${class.dir}"/>
+    <delete file="${ant.project.name}.jar"/>
+  </target>
+
+  <target name="compile">
+    <mkdir dir="${class.dir}"/>
+    <javac srcdir="${src.dir}" destdir="${class.dir}" includeantruntime="false" classpathref="classpath"/>
+  </target>
+
+  <target name="jar" depends="compile">
+    <manifestclasspath property="jar.classpath" jarfile="${ant.project.name}.jar">
+      <classpath>
+		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+      </classpath>
+    </manifestclasspath>
+    
+    <jar destfile="${ant.project.name}.jar" basedir="${class.dir}">
+      <manifest>
+		<attribute name="Main-Class" value="${main-class}"/>
+		<attribute name="Class-Path" value="${jar.classpath}"/>
+      </manifest>
+      <zipgroupfileset dir="${lib.dir}"/>
+    </jar>
+  </target>
+
+</project>
